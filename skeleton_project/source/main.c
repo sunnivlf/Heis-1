@@ -26,13 +26,21 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     elevator el;
+    queue_clear_all(&el);
+    
+    
+
+    
     start_timer(&el);
     while(1){
+        queue_update(&el);
         if(times_up(&el)){
-            printf("times up");
-            return 0;
+            queue_print(&el);
+            break;
         }
     }
+
+    
 
     /*printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");

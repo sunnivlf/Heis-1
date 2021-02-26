@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "elevator.h"
 
-#define DOOR_TIME 3 
+#define DOOR_TIME 10 
 
 
 

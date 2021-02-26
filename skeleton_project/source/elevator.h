@@ -29,7 +29,7 @@ typedef enum floor{
 
 typedef struct elevator{
     elev_state state;
-    floor previousfloor;
+    floor previousfloor; //trenger vi egt denne?
     floor currentfloor;
     int queue[HARDWARE_NUMBER_OF_FLOORS][HARDWARE_NUMBER_OF_BUTTONS];
     HardwareMovement motor_dir;
@@ -37,11 +37,14 @@ typedef struct elevator{
 } elevator;
 
 
-int elev_init();
-void set_prevoius_floor(elevator *el);
-void set_current_floor(elevator *el);
+int elev_init(elevator* el);
+int get_current_floor(elevator *el);
+void elev_control_range(elevator* el);
+//int elev_at_floor(elevator* el);
 HardwareMovement elev_set_motor_dir(elevator* el);
 
 
 
 #endif // ##ifndef ELEVATOR_H
+
+//
