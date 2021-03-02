@@ -1,7 +1,7 @@
 #include "elevator.h"
 
 
-int elev_init(elevator* el){
+void elev_init(elevator* el){
     int error = hardware_init();
     if(error != 0){
         fprintf(stderr, "Unable to initialize hardware\n");
@@ -13,10 +13,13 @@ int elev_init(elevator* el){
     while(get_current_floor(el) == -1){
         hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
     }
-
     hardware_command_movement(HARDWARE_MOVEMENT_STOP); //Heisen skal stå i ro
-    el->motor_dir = HARDWARE_MOVEMENT_STOP; 
-    return 1;
+
+    el->current_dir = HARDWARE_MOVEMENT_STOP; 
+    el->currentfloor = get_current_floor(el);
+    queue_clear_all(el);
+
+    el->state = IDLE;
 }
 
 
@@ -37,7 +40,31 @@ int get_current_floor(elevator *el){
 }*/
 
 HardwareMovement elev_set_motor_dir(elevator* el){
-    if (el->previousfloor < el->currentfloor){
+    switch(el->previous_dir){
+        case HARDWARE_MOVEMENT_UP:
+            if(queue_check_orders_above(el)){
+                return HARDWARE_MOVEMENT_UP;
+            }
+            else if(queue_check_orders_below(el)){
+                return HARDWARE_MOVEMENT_DOWN;
+            }
+            break;
+        case HARDWARE_MOVEMENT_DOWN:
+            if(queue_check_orders_below(el)){
+                return HARDWARE_MOVEMENT_DOWN;
+            }
+            else if(queue_check_orders_above(el)){
+                return HARDWARE_MOVEMENT_UP;
+            }
+            break;
+        case HARDWARE_MOVEMENT_STOP:
+            if(queue_check_orders_above(el)){
+                return HARDWARE_MOVEMENT_UP;
+            }
+            else if(queue_check_orders_below(el)){
+                return HARDWARE_MOVEMENT_DOWN;
+            }
+            break;
         
     }
 }
@@ -54,4 +81,13 @@ void elev_control_range(elevator* el){
     }
 }
 
+
+void elev_set_floor_indicator(elevator* el){
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        if(hardware_read_floor_sensor(f)){
+            hardware_command_floor_indicator_on(f);
+        }
+    }
+    el->currentfloor = get_current_floor(el);
+}
 

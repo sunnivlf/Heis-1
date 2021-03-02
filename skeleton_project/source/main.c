@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "hardware.h"
+#include "elevator.h"
+#include "fsm.h"
 #include "timer.h"
 
 //kalles ved emergency_stop
@@ -26,16 +28,21 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     elevator el;
-    queue_clear_all(&el);
+    elev_init(&el);
+    /*while(1){
+
+    }*/
+    //fsm_switch(&el);
     
     
 
-    
     start_timer(&el);
     while(1){
         queue_update(&el);
+        queue_set_light(&el);
         if(times_up(&el)){
             queue_print(&el);
+            printf("times up\n");
             break;
         }
     }
