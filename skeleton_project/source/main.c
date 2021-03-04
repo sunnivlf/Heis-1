@@ -29,14 +29,11 @@ int main(){
 
     elevator el;
     elev_init(&el);
-    /*while(1){
-
-    }*/
-    //fsm_switch(&el);
+    fsm_switch(&el);
     
     
 
-    start_timer(&el);
+    /*start_timer(&el);
     while(1){
         queue_update(&el);
         queue_set_light(&el);
@@ -45,7 +42,8 @@ int main(){
             printf("times up\n");
             break;
         }
-    }
+    }*/
+    
 
     
 

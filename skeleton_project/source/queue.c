@@ -34,6 +34,7 @@ void queue_set_light(elevator* el){
     }
 }
 
+
 void queue_print(elevator* el){
     printf("\n");
     for(int i = 0; i < HARDWARE_NUMBER_OF_BUTTONS; i++){
@@ -70,7 +71,7 @@ int queue_check_orders_below(elevator* el){
 
 int queue_orders_at_floor(elevator* el){
     for(int i = 0; i < HARDWARE_NUMBER_OF_BUTTONS; i++){
-        if(el->queue[el->currentfloor][i]){
+        if(el->queue[el->currentfloor][i] == 1){
             return 1;
         }
     }
@@ -80,10 +81,12 @@ int queue_orders_at_floor(elevator* el){
 void queue_clear_executed_order(elevator* el){
     for(int i = 0; i < HARDWARE_NUMBER_OF_BUTTONS; i++){
         el->queue[el->currentfloor][i]=0;
+        hardware_command_order_light(el->currentfloor, i, 0);
     }
 
     el->queue[HARDWARE_NUMBER_OF_FLOORS-1][0]=-1;
     el->queue[0][2]=-1;
+    //fjerne lys
 }
 
 int queue_take_order(elevator* el){

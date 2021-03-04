@@ -15,6 +15,7 @@ void elev_init(elevator* el){
     }
     hardware_command_movement(HARDWARE_MOVEMENT_STOP); //Heisen skal stå i ro
 
+    elev_clear_all_lights(el);
     el->current_dir = HARDWARE_MOVEMENT_STOP; 
     el->currentfloor = get_current_floor(el);
     queue_clear_all(el);
@@ -32,12 +33,6 @@ int get_current_floor(elevator *el){
     return -1;
 }
 
-/*int elev_at_floor(elevator* el){
-    if(hardware_read_floor_sensor(0) || hardware_read_floor_sensor(1) || hardware_read_floor_sensor(2) || hardware_read_floor_sensor(3)){
-        return 1;
-    }
-    return 0;
-}*/
 
 HardwareMovement elev_set_motor_dir(elevator* el){
     switch(el->previous_dir){
@@ -69,25 +64,61 @@ HardwareMovement elev_set_motor_dir(elevator* el){
     }
 }
 
-void elev_control_range(elevator* el){
-    /* Code block that makes the elevator go up when it reach the botton*/
-    if(hardware_read_floor_sensor(0)){
-        hardware_command_movement(HARDWARE_MOVEMENT_UP);
-    }
+void elev_update_dir(elevator* el){
+    el->previous_dir = el->current_dir;
+    el->current_dir = elev_set_motor_dir(el);
+}
 
-    /* Code block that makes the elevator go down when it reach the top floor*/
-    if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
-        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+void elev_control_range(elevator* el){
+    // Code block that makes the elevator go up when it reach the botton
+    if(hardware_read_floor_sensor(0)){
+        hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+        el->current_dir = HARDWARE_MOVEMENT_UP; // kanskje endre current_dir til next
     }
+    /*if(hardware_read_floor_sensor(0)){
+        hardware_command_movement(HARDWARE_MOVEMENT_UP);
+    }*/
+
+    if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
+        hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+        el->current_dir = HARDWARE_MOVEMENT_DOWN;
+    }
+    // Code block that makes the elevator go down when it reach the top floor
+    /*if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
+        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+    }*/
 }
 
 
 void elev_set_floor_indicator(elevator* el){
+    int temp = get_current_floor(el);
+
+    if (temp== -1){ //gjør slik at curentfloor ikke blir satt lik -1
+        return;
+    }
+    
+    el->previousfloor = el->currentfloor;
+    el->currentfloor = temp;
+
     for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         if(hardware_read_floor_sensor(f)){
             hardware_command_floor_indicator_on(f);
         }
     }
-    el->currentfloor = get_current_floor(el);
+    
 }
 
+void elev_clear_all_lights(elevator* el){
+    HardwareOrder order_types[3] = {
+        HARDWARE_ORDER_UP,
+        HARDWARE_ORDER_INSIDE,
+        HARDWARE_ORDER_DOWN
+    };
+
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        for(int i = 0; i < 3; i++){
+            HardwareOrder type = order_types[i];
+            hardware_command_order_light(f, type, 0);
+        }
+    }
+}
