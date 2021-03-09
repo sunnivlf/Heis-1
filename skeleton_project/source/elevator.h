@@ -30,12 +30,33 @@ typedef struct elevator{
     time_t start_time;
 } elevator;
 
-
+/**
+ * @brief Initializes the elevator. Moves to defined state.
+ */
 void elev_init(elevator* el);
+
+/**
+ * @brief Function to get the current floor the elevator is at.
+ */
 int elev_get_current_floor(elevator *el);
+
+/**
+ * @brief Secures that the elevator does not move past
+ * its range.
+ */
 void elev_control_range(elevator* el);
+
+/**
+ * @brief Sets the motor direction.
+ */
 HardwareMovement elev_set_motor_dir(elevator* el);
+
+/**
+ * @brief Sets the floor indicator light.
+ */
 void elev_set_floor_indicator(elevator* el);
+
+
 void elev_update_dir(elevator* el);
 void elev_set_current_floor(elevator* el);
 
