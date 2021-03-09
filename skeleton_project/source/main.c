@@ -7,7 +7,7 @@
 #include "timer.h"
 
 //kalles ved emergency_stop
-static void clear_all_order_lights(){
+/*static void clear_all_order_lights(){
     HardwareOrder order_types[3] = {
         HARDWARE_ORDER_UP,
         HARDWARE_ORDER_INSIDE,
@@ -20,7 +20,7 @@ static void clear_all_order_lights(){
             hardware_command_order_light(f, type, 0);
         }
     }
-}
+}*/
 
 
 int main(){

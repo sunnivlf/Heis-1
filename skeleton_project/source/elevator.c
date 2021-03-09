@@ -18,6 +18,7 @@ void elev_init(elevator* el){
     elev_clear_all_lights(el);
     el->current_dir = HARDWARE_MOVEMENT_STOP; 
     el->currentfloor = get_current_floor(el);
+    //elev_set_floor_indicator(el); //oppdaterer etasjelys og currentfloor kontinuerlig
     queue_clear_all(el);
 
     el->state = IDLE;
@@ -91,6 +92,14 @@ void elev_control_range(elevator* el){
 
 
 void elev_set_floor_indicator(elevator* el){
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        if(hardware_read_floor_sensor(f)){
+            hardware_command_floor_indicator_on(f);
+        }
+    }  
+}
+
+void elev_set_current_floor(elevator* el){
     int temp = get_current_floor(el);
 
     if (temp== -1){ //gjør slik at curentfloor ikke blir satt lik -1
@@ -99,13 +108,6 @@ void elev_set_floor_indicator(elevator* el){
     
     el->previousfloor = el->currentfloor;
     el->currentfloor = temp;
-
-    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
-        if(hardware_read_floor_sensor(f)){
-            hardware_command_floor_indicator_on(f);
-        }
-    }
-    
 }
 
 void elev_clear_all_lights(elevator* el){

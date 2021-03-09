@@ -34,6 +34,16 @@ void queue_set_light(elevator* el){
     }
 }
 
+void queue_clear_light(elevator* el){
+    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
+        for (int j = 0; j < 3; j++){
+            if(el->queue[i][j] == 1){
+               hardware_command_order_light(i, j, 0); 
+            }
+        }
+    }
+}
+
 
 void queue_print(elevator* el){
     printf("\n");
@@ -90,7 +100,7 @@ void queue_clear_executed_order(elevator* el){
 }
 
 int queue_take_order(elevator* el){
-    if(el->queue[el->currentfloor][1]){
+    if(el->queue[el->currentfloor][1] == 1){
         return 1;
     }
 

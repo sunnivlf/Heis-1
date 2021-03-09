@@ -9,7 +9,7 @@ int fsm_switch(elevator* el){
             el->state = EMERGENCY_STOP;
         }
 
-        elev_set_floor_indicator(el); //oppdaterer etasjelys og currentfloor kontinuerlig
+        elev_set_floor_indicator(el); //oppdaterer etasjelys
         queue_update(el);
         queue_set_light(el);
 
@@ -34,12 +34,12 @@ int fsm_switch(elevator* el){
 void fsm_idle(elevator* el){
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     if(queue_orders_at_floor(el)){
-        printf("\nAt floor\n");
         el->state = DOOR_OPEN;
     }
     else if(queue_check_orders_above(el) || queue_check_orders_below(el)){
         el->state = MOVE;
     }
+    
     return;
 }
 
@@ -47,9 +47,9 @@ void fsm_move(elevator* el){
     elev_control_range(el);
     elev_update_dir(el);
     hardware_command_movement(el->current_dir);
-    queue_print(el);
-    
-    if(get_current_floor(el)!=-1 && el->previousfloor!=get_current_floor(el)){
+    elev_set_current_floor(el); //Må oppdateres hyppigere for en spesifikk kombinasjon
+
+    if(get_current_floor(el)!=-1 && el->previousfloor!=el->currentfloor){ //ingen av disse betingelsene oppfylles. 
         if(queue_take_order(el)){
             el->state = IDLE;
         }
@@ -64,6 +64,7 @@ void fsm_door_open(elevator* el){
     while (1)
     {
         queue_update(el);
+        queue_set_light(el);
 
         if(hardware_read_obstruction_signal()){
             return;
@@ -95,14 +96,31 @@ void fsm_emergency_stop(elevator* el){
         hardware_command_stop_light(1);
     }
     
-    hardware_command_stop_light(0);
+    queue_clear_light(el);
     queue_clear_all(el);
+    hardware_command_stop_light(0);
 
     if(get_current_floor(el)!=-1){
         el->state=DOOR_OPEN;
     }
     else{
-        elev_init(el);
+        emergency_stop_init(el);
     }
 }
 
+void emergency_stop_init(elevator* el){
+    queue_update(el);
+    queue_set_light(el);
+    if(queue_check_orders_above(el) || queue_check_orders_below(el) || queue_orders_at_floor(el)){
+        if(el->current_dir == HARDWARE_MOVEMENT_UP && queue_orders_at_floor(el)){
+            el->currentfloor++;
+        }
+        else if(el->current_dir == HARDWARE_MOVEMENT_DOWN && queue_orders_at_floor(el)){
+            el->currentfloor--;
+        }
+        el->state = MOVE;
+    }
+    else{
+        return;
+    }
+}

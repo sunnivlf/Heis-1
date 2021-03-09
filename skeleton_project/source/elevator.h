@@ -46,6 +46,7 @@ HardwareMovement elev_set_motor_dir(elevator* el);
 void elev_set_floor_indicator(elevator* el);
 void elev_clear_all_lights(elevator* el);
 void elev_update_dir(elevator* el);
+void elev_set_current_floor(elevator* el);
 
 
 
