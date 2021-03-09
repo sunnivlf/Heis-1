@@ -32,32 +32,55 @@ typedef struct elevator{
 
 /**
  * @brief Initializes the elevator. Moves to defined state.
+ * @param[in, out] el The elevator.
  */
 void elev_init(elevator* el);
 
 /**
- * @brief Function to get the current floor the elevator is at.
+ * @brief Gets the current floor. 
+ * 
+ * @return -1 if the elevator is between floors, otherwise the floor index.
  */
-int elev_get_current_floor(elevator *el);
+int elev_get_current_floor();
 
 /**
  * @brief Secures that the elevator does not move past
- * its range.
+ * its range by changing the motor direction when it reaches 
+ * the top/bottom floor.
+ * @param[in] el The elevator.
  */
 void elev_control_range(elevator* el);
 
 /**
- * @brief Sets the motor direction.
+ * @brief Sets the motor direction. Depending on previous
+ * direction and next orders.
+ * 
+ * @param[in, out] el The elevator.
+ * 
+ * @return @c HARDWARE_MOVEMENT_UP, @c HARDWARE_MOVEMENT_STOP, @c HARDWARE_MOVEMENT_DOWN
  */
 HardwareMovement elev_set_motor_dir(elevator* el);
 
 /**
- * @brief Sets the floor indicator light.
+ * @brief Sets the floor indicator light for the current floor.
+ * If the elevator is between to floors, the floor indicator light
+ * for the floor the elevator just left is lit.
+ * @param[in] el The elevator.
  */
 void elev_set_floor_indicator(elevator* el);
 
-
+/**
+ * @brief Updates the directions. The previous direction is set
+ * equal to the current direction and the current direction is set
+ * by @c elev_set_motor_dir.
+ * @param[in] el The elevator.
+ */
 void elev_update_dir(elevator* el);
+
+/**
+ * @brief Sets the current floor.
+ * @param[in, out] el The elevator.
+ */
 void elev_set_current_floor(elevator* el);
 
 
