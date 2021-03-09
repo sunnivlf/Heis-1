@@ -1,0 +1,11 @@
+<map id="source/hardware.h" name="source/hardware.h">
+<area shape="rect" id="node2" href="$elevator_8h.html" title="Elevator. " alt="" coords="208,80,331,107"/>
+<area shape="rect" id="node7" href="$main_8c_source.html" title="source/main.c" alt="" coords="219,304,323,331"/>
+<area shape="rect" id="node3" href="$elevator_8c_source.html" title="source/elevator.c" alt="" coords="24,155,147,181"/>
+<area shape="rect" id="node4" href="$queue_8h.html" title="Functions to take care of the elevator queue. " alt="" coords="353,155,463,181"/>
+<area shape="rect" id="node9" href="$timer_8h.html" title="Functions to keep the door open for a period of time. " alt="" coords="171,155,277,181"/>
+<area shape="rect" id="node5" href="$fsm_8h_source.html" title="source/fsm.h" alt="" coords="352,229,451,256"/>
+<area shape="rect" id="node8" href="$queue_8c_source.html" title="source/queue.c" alt="" coords="475,229,586,256"/>
+<area shape="rect" id="node6" href="$fsm_8c_source.html" title="source/fsm.c" alt="" coords="352,304,451,331"/>
+<area shape="rect" id="node10" href="$timer_8c_source.html" title="source/timer.c" alt="" coords="121,229,226,256"/>
+</map>

@@ -57,7 +57,7 @@ void queue_print(elevator* el){
 }
 
 
-int queue_check_orders_above(elevator* el){
+int queue_orders_above(elevator* el){
     for(int i = el->currentfloor + 1; i < HARDWARE_NUMBER_OF_FLOORS; i++){
         for(int j = 0; j < HARDWARE_NUMBER_OF_BUTTONS; j++){
             if(el->queue[i][j] == 1){
@@ -68,7 +68,7 @@ int queue_check_orders_above(elevator* el){
     return 0;
 }
 
-int queue_check_orders_below(elevator* el){
+int queue_orders_below(elevator* el){
     for(int i = 0; i < el->currentfloor; i++){
         for(int j = 0; j < HARDWARE_NUMBER_OF_BUTTONS; j++){
             if(el->queue[i][j] == 1){
@@ -107,12 +107,12 @@ int queue_take_order(elevator* el){
     switch (el->current_dir)
     {
     case HARDWARE_MOVEMENT_UP:
-        if((el->queue[el->currentfloor][0]) || ((el->queue[el->currentfloor][2]) && !queue_check_orders_above(el))){
+        if((el->queue[el->currentfloor][0]) || ((el->queue[el->currentfloor][2]) && !queue_orders_above(el))){
             return 1;
         }
         break;
     case HARDWARE_MOVEMENT_DOWN:
-        if((el->queue[el->currentfloor][2]) || ((el->queue[el->currentfloor][0]) && !queue_check_orders_below(el))){
+        if((el->queue[el->currentfloor][2]) || ((el->queue[el->currentfloor][0]) && !queue_orders_below(el))){
             return 1;
         }
         break;
@@ -122,4 +122,19 @@ int queue_take_order(elevator* el){
         break;
     }
     return 0;
+}
+
+void queue_clear_all_lights(elevator* el){
+    HardwareOrder order_types[3] = {
+        HARDWARE_ORDER_UP,
+        HARDWARE_ORDER_INSIDE,
+        HARDWARE_ORDER_DOWN
+    };
+
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        for(int i = 0; i < 3; i++){
+            HardwareOrder type = order_types[i];
+            hardware_command_order_light(f, type, 0);
+        }
+    }
 }

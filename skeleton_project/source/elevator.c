@@ -10,14 +10,14 @@ void elev_init(elevator* el){
 
     
     //hvis den ikke er i en etasje skal den kjøre nedover og stoppe i nærmeste etasje
-    while(get_current_floor(el) == -1){
+    while(elev_get_current_floor(el) == -1){
         hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
     }
     hardware_command_movement(HARDWARE_MOVEMENT_STOP); //Heisen skal stå i ro
 
-    elev_clear_all_lights(el);
+    queue_clear_all_lights(el);
     el->current_dir = HARDWARE_MOVEMENT_STOP; 
-    el->currentfloor = get_current_floor(el);
+    el->currentfloor = elev_get_current_floor(el);
     //elev_set_floor_indicator(el); //oppdaterer etasjelys og currentfloor kontinuerlig
     queue_clear_all(el);
 
@@ -25,7 +25,7 @@ void elev_init(elevator* el){
 }
 
 
-int get_current_floor(elevator *el){
+int elev_get_current_floor(elevator *el){
     for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
         if (hardware_read_floor_sensor(i)){
             return i;
@@ -38,26 +38,26 @@ int get_current_floor(elevator *el){
 HardwareMovement elev_set_motor_dir(elevator* el){
     switch(el->previous_dir){
         case HARDWARE_MOVEMENT_UP:
-            if(queue_check_orders_above(el)){
+            if(queue_orders_above(el)){
                 return HARDWARE_MOVEMENT_UP;
             }
-            else if(queue_check_orders_below(el)){
+            else if(queue_orders_below(el)){
                 return HARDWARE_MOVEMENT_DOWN;
             }
             break;
         case HARDWARE_MOVEMENT_DOWN:
-            if(queue_check_orders_below(el)){
+            if(queue_orders_below(el)){
                 return HARDWARE_MOVEMENT_DOWN;
             }
-            else if(queue_check_orders_above(el)){
+            else if(queue_orders_above(el)){
                 return HARDWARE_MOVEMENT_UP;
             }
             break;
         case HARDWARE_MOVEMENT_STOP:
-            if(queue_check_orders_above(el)){
+            if(queue_orders_above(el)){
                 return HARDWARE_MOVEMENT_UP;
             }
-            else if(queue_check_orders_below(el)){
+            else if(queue_orders_below(el)){
                 return HARDWARE_MOVEMENT_DOWN;
             }
             break;
@@ -100,7 +100,7 @@ void elev_set_floor_indicator(elevator* el){
 }
 
 void elev_set_current_floor(elevator* el){
-    int temp = get_current_floor(el);
+    int temp = elev_get_current_floor(el);
 
     if (temp== -1){ //gjør slik at curentfloor ikke blir satt lik -1
         return;
@@ -110,17 +110,3 @@ void elev_set_current_floor(elevator* el){
     el->currentfloor = temp;
 }
 
-void elev_clear_all_lights(elevator* el){
-    HardwareOrder order_types[3] = {
-        HARDWARE_ORDER_UP,
-        HARDWARE_ORDER_INSIDE,
-        HARDWARE_ORDER_DOWN
-    };
-
-    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
-        for(int i = 0; i < 3; i++){
-            HardwareOrder type = order_types[i];
-            hardware_command_order_light(f, type, 0);
-        }
-    }
-}

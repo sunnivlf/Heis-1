@@ -40,14 +40,14 @@ void queue_print(elevator* el);
  * @brief Checks if the queue contains any orders above its current floor. 
  * @param[in] el The elevator.
  */
-int queue_check_orders_above(elevator* el);
+int queue_orders_above(elevator* el);
 
 
 /**
  * @brief Checks if the queue contains any orders below its current floor. 
  * @param[in] el The elevator.
  */
-int queue_check_orders_below(elevator* el);
+int queue_orders_below(elevator* el);
 
 /**
  * @brief Checks if the queue contains any orders at its current floor. 
@@ -68,6 +68,8 @@ int queue_take_order(elevator* el);
 
 void queue_clear_light(elevator* el);
 
+void queue_clear_all_lights(elevator* el);
+
 #endif // #ifndef QUEUE_H
 
-//el->motor_dir = elev_choose_dir;
+
