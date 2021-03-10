@@ -12,7 +12,9 @@
 #ifndef ELEVATOR_H
 #define ELEVATOR_H
 
-
+/**
+ * @brief The elevator's different states.
+ */
 typedef enum elev_state{
     IDLE,
     MOVE,
@@ -20,6 +22,9 @@ typedef enum elev_state{
     EMERGENCY_STOP
 } elev_state;
 
+/**
+ * @brief A structure to represent the elevator.
+ */
 typedef struct elevator{
     elev_state state;
     int previousfloor;
