@@ -1,3 +1,5 @@
+#ifndef TIMER_H
+#define TIMER_H
 #include "timer.h"
 
 
@@ -14,17 +16,7 @@ int times_up(elevator* el){
     }
     else{
         return 0;
-    }
-    
-
-    
-    
-
-    /*while (counter < DOOR_TIME);
-    
-    return(1); */
-    
+    }  
 }   
 
-
-//while (!timer()){door open light on}
+#endif // #ifndef TIMER_H
