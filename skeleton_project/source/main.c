@@ -12,7 +12,7 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     elevator el;
-    elev_init(&el);
+    fsm_init(&el);
     fsm_switch(&el);
     
     return 0;
