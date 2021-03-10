@@ -4,7 +4,7 @@ void queue_update(elevator* el){
     for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
         for (int j = 0; j < 3; j++){
             if (hardware_read_order(i, j)){ //Sjekker alle kombinasjoner av etasjer og bestillingstyper
-                el->queue[i][j] = 1; //print når oppdateringen skjer
+                el->queue[i][j] = 1;
             }
         }
     }
