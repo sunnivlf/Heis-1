@@ -49,12 +49,21 @@ void elev_init(elevator* el);
 int elev_get_current_floor();
 
 /**
- * @brief Secures that the elevator does not move past
- * its range by changing the motor direction when it reaches 
- * the top/bottom floor.
+ * @brief Sets the current floor when the elevator reaches a new
+ * floor.
+ * 
+ * @param[in, out] el The elevator.
+ */
+void elev_set_current_floor(elevator* el);
+
+/**
+ * @brief Sets the floor indicator light for the floor the elevator
+ * is currently on. If the elevator is between two floors, the floor 
+ * indicator light is lit for the floor the elevator just left.
+ * 
  * @param[in] el The elevator.
  */
-void elev_control_range(elevator* el);
+void elev_set_floor_indicator(elevator* el);
 
 /**
  * @brief Sets the motor direction depending on previous
@@ -67,15 +76,6 @@ void elev_control_range(elevator* el);
 HardwareMovement elev_set_motor_dir(elevator* el);
 
 /**
- * @brief Sets the floor indicator light for the floor the elevator
- * is currently on. If the elevator is between two floors, the floor 
- * indicator light is lit for the floor the elevator just left.
- * 
- * @param[in] el The elevator.
- */
-void elev_set_floor_indicator(elevator* el);
-
-/**
  * @brief Updates the directions. The previous direction is set
  * equal to the current direction and the current direction is set
  * by @c elev_set_motor_dir.
@@ -85,16 +85,14 @@ void elev_set_floor_indicator(elevator* el);
 void elev_update_dir(elevator* el);
 
 /**
- * @brief Sets the current floor when the elevator reaches a new
- * floor.
- * 
- * @param[in, out] el The elevator.
+ * @brief Secures that the elevator does not move past
+ * its range by changing the motor direction when it reaches 
+ * the top/bottom floor.
+ * @param[in] el The elevator.
  */
-void elev_set_current_floor(elevator* el);
+void elev_control_range(elevator* el);
 
 
 
 
 #endif // ##ifndef ELEVATOR_H
-
-//
