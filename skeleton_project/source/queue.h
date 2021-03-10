@@ -1,12 +1,11 @@
-#ifndef QUEUE_H
-#define QUEUE_H
-
-#include "elevator.h"
-
 /**
  * @file
  * @brief Functions to take care of the elevator queue. 
  */
+
+#ifndef QUEUE_H
+#define QUEUE_H
+#include "elevator.h"
 
 
 /**
@@ -62,8 +61,6 @@ int queue_orders_at_floor(elevator* el);
  */
 void queue_clear_executed_order(elevator* el);
 int queue_take_order(elevator* el);
-
-//void queue_clear(elevator* el);
 
 
 void queue_clear_light(elevator* el);
