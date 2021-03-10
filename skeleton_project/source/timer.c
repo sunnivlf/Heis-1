@@ -1,8 +1,4 @@
-#ifndef TIMER_H
-#define TIMER_H
 #include "timer.h"
-
-
 
 void start_timer(elevator* el){
     el->start_time = time(NULL);
@@ -19,4 +15,3 @@ int times_up(elevator* el){
     }  
 }   
 
-#endif // #ifndef TIMER_H
