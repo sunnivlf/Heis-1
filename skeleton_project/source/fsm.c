@@ -1,5 +1,25 @@
 #include "fsm.h"
 
+void fsm_init(elevator* el){
+    int error = hardware_init();
+    if(error != 0){
+        fprintf(stderr, "Unable to initialize hardware\n");
+        exit(1);
+    }
+
+    //Hvis heisen ikke er i en etasje skal den kjøre nedover og stoppe i nærmeste etasje
+    while(elev_get_current_floor() == -1){
+        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+    }
+    hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+
+    queue_clear_all_lights(el);
+    el->current_dir = HARDWARE_MOVEMENT_STOP; 
+    el->currentfloor = elev_get_current_floor();
+    queue_clear_all(el);
+    el->state = IDLE;
+}
+
 //En tilstandsswitch som endrer heisens tilstand
 int fsm_switch(elevator* el){
 
