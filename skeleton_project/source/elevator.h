@@ -36,12 +36,6 @@ typedef struct elevator{
 } elevator;
 
 /**
- * @brief Initializes the elevator and moves it to a defined state.
- * @param[in, out] el The elevator.
- */
-void elev_init(elevator* el);
-
-/**
  * @brief Gets the floor the elevator is currently on.
  * 
  * @return -1 if the elevator is between floors, otherwise the floor's index.
