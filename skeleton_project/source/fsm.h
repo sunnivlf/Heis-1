@@ -5,6 +5,11 @@
 #include "timer.h"
 #include "queue.h"
 
+/**
+ * @brief Initializes the elevator and moves it to a defined state.
+ * @param[in, out] el The elevator.
+ */
+void fsm_init(elevator* el);
 
 /**
  * @brief Contains the logic for the finit state machine.
